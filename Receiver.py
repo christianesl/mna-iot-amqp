@@ -1,15 +1,19 @@
-import pika
+import pika,os
 
 def receptor():
-	connect = pika.BlockingConnection(pika.ConnectionParameters(host='locahost'))
+	url = os.environ.get("CLOUDAMQP_URL", "amqp://guest:guest@localhost:5672/")
+	params = pika.URLParameters(url)
+	connection = pika.BlockingConnection(params)
 	channel = connection.channel()
 
-	channel.queue_declare(queue="mna29")
+	#channel.queue_declare(queue="mna29")
 
-	def callback(ch,method,properties,body):
+	def retrieveMessage(ch,method,properties,body):
 		print("Message received %r" % body.decode())
+		channel.basic_ack(method.delivery_tag)
 
-	channel.basic_consume(queue="mna", on_message_callback=callback)
+	channel.basic_consume(queue="mna29", on_message_callback=retrieveMessage)
 	channel.start_consuming()
 
-report()
+
+receptor()

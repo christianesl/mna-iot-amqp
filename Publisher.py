@@ -1,7 +1,9 @@
-import pika
+import pika,os
 
-connect = pika.BlockingConnection(pika.ConnectionParameters(host='locahost'))
-channel = connect.channel()
+url = os.environ.get("CLOUDAMQP_URL", "amqp://guest:guest@localhost:5672/")
+params = pika.URLParameters(url)
+connection = pika.BlockingConnection(params)
+channel = connection.channel()
 
 channel.queue_declare(queue="mna29")
 
@@ -12,4 +14,4 @@ while x < 5:
 	print("sent :", msg)
 	x += 1
 
-connect.close()
+connection.close()

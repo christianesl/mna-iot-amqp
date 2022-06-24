@@ -6,7 +6,7 @@ def receptor():
 	connection = pika.BlockingConnection(params)
 	channel = connection.channel()
 
-	#channel.queue_declare(queue="mna29")
+	#channel.queue_declare(queue="mna29") # create new queue
 
 	def retrieveMessage(ch,method,properties,body):
 		print("Message received %r" % body.decode())

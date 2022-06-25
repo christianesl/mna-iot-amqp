@@ -10,9 +10,9 @@ def receptor():
 
 	def retrieveMessage(ch,method,properties,body):
 		print("Message received %r" % body.decode())
-		channel.basic_ack(method.delivery_tag)
+		#channel.basic_ack(method.delivery_tag)
 
-	channel.basic_consume(queue="mna29", on_message_callback=retrieveMessage)
+	channel.basic_consume(queue="mna29", auto_ack=True, on_message_callback=retrieveMessage)
 	channel.start_consuming()
 
 
